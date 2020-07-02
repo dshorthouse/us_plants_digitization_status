@@ -1,5 +1,7 @@
 # Apache Spark Set-Up and Queries
 
+Downloaded dataset from GBIF: [https://doi.org/10.15468/dl.sbuavy](https://doi.org/10.15468/dl.sbuavy)
+
 ```bash
 $ brew install apache-spark
 $ spark-shell --packages org.apache.spark:spark-avro_2.12:3.0.0 --driver-memory 12G
