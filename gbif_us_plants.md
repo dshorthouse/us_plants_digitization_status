@@ -743,7 +743,7 @@ val df = spark.
     option("escape", "\"").
     option("treatEmptyValuesAsNulls", "true").
     option("ignoreLeadingWhiteSpace", "true").
-    load("/Users/dshorthouse/Downloads/GBIF/occurrence.txt").
+    load("/Users/shorthoused/Downloads/GBIF/occurrence.txt").
     select(terms.map(col): _*).
     filter($"kingdomKey".isin(kingdomKeys: _*)).
     filter($"datasetKey".isin(datasetKeys: _*)).
@@ -754,7 +754,7 @@ val df = spark.
 df.write.mode("overwrite").format("avro").save("gbif_us_plants")
 
 //load the saved DataFrame, can later skip the above processes and start from here
-val df1 = spark.
+val df = spark.
     read.
     format("avro").
     load("gbif_us_plants")
