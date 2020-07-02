@@ -2,7 +2,7 @@
 
 ```bash
 $ brew install apache-spark
-$ spark-shell --packages org.apache.spark:spark-avro_2.11:2.4.5 --driver-memory 12G
+$ spark-shell --packages org.apache.spark:spark-avro_2.12:3.0.0 --driver-memory 12G
 ```
 
 ```scala
