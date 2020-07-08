@@ -731,6 +731,7 @@ val terms = List(
   "datasetKey",
   "locality",
   "higherGeography",
+  "countryCode",
   "recordedBy",
   "eventDate",
   "identifiedBy",
@@ -763,7 +764,9 @@ val df = spark.
     filter($"kingdomKey".isin(kingdomKeys: _*)).
     filter($"datasetKey".isin(datasetKeys: _*)).
     withColumnRenamed("mediaType", "hasImage").
-    withColumn("hasImage", when($"hasImage".contains("StillImage"), 1).otherwise(lit(null)))
+    withColumn("hasImage", when($"hasImage".contains("StillImage"), 1).otherwise(lit(null))).
+    withColumn("hasCoordinate", when($"hasCoordinate".contains("true"), 1).otherwise(lit(null))).
+    withColumn("hasGeospatialIssues", when($"hasGeospatialIssues".contains("true"), 1).otherwise(lit(null)))
 
 //optionally save the DataFrame to disk so we don't have to do the above again
 df.write.mode("overwrite").format("avro").save("gbif_us_plants")
@@ -785,6 +788,7 @@ df.groupBy("institutionCode").
     count("acceptedNameUsage").alias("has_acceptedNameUsage"),
     count("locality").alias("has_locality"),
     count("higherGeography").alias("has_higherGeography"),
+    count("countryCode").alias("has_countryCode"),
     count("hasCoordinate").alias("has_coordinates"),
     count("hasImage").alias("has_image"),
     count("dateIdentified").alias("has_dateIdentified"),
