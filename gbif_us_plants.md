@@ -719,11 +719,24 @@ val datasetKeys = List(
 
 val terms = List(
   "gbifID",
+  "institutionCode",
+  "collectionCode",
+  "catalogNumber",
+  "occurrenceID",
   "kingdom",
   "kingdomKey",
+  "speciesKey",
+  "scientificName",
+  "acceptedNameUsage",
   "datasetKey",
   "locality",
+  "higherGeography",
+  "recordedBy",
+  "eventDate",
+  "identifiedBy",
+  "dateIdentified",
   "hasCoordinate",
+  "hasGeospatialIssues",
   "mediaType"
 )
 
@@ -750,7 +763,7 @@ val df = spark.
     filter($"kingdomKey".isin(kingdomKeys: _*)).
     filter($"datasetKey".isin(datasetKeys: _*)).
     withColumnRenamed("mediaType", "hasImage").
-    withColumn("hasImage", when($"hasImage".contains("StillImage"), 1).otherwise(0))
+    withColumn("hasImage", when($"hasImage".contains("StillImage"), 1).otherwise(lit(null)))
 
 //optionally save the DataFrame to disk so we don't have to do the above again
 df.write.mode("overwrite").format("avro").save("gbif_us_plants")
@@ -760,3 +773,32 @@ val df = spark.
     read.
     format("avro").
     load("gbif_us_plants")
+
+//Save distinct list of institutionCode, collectionCode
+df.groupBy("institutionCode").
+  agg(
+    count("gbifID").alias("total"),
+    count("collectionCode").alias("has_collectionCode"),
+    count("catalogNumber").alias("has_catalogNumber"),
+    count("speciesKey").alias("has_speciesKey"),
+    count("scientificName").alias("has_scientificName"),
+    count("acceptedNameUsage").alias("has_acceptedNameUsage"),
+    count("locality").alias("has_locality"),
+    count("higherGeography").alias("has_higherGeography"),
+    count("hasCoordinate").alias("has_coordinates"),
+    count("hasImage").alias("has_image"),
+    count("dateIdentified").alias("has_dateIdentified"),
+    count("identifiedBy").alias("has_identifiedBy"),
+    count("recordedBy").alias("has_recordedBy"),
+    count("eventDate").alias("has_eventDate")
+  ).
+  repartition(1).
+  write.
+  mode("overwrite").
+  option("header", "true").
+  option("quote", "\"").
+  option("escape", "\"").
+  csv("gbif_institutionCode_summmary")
+
+
+
