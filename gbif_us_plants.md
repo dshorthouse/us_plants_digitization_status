@@ -746,7 +746,7 @@ var kingdomKeys = List(
   "2",
   "5",
   "6"
-  )
+)
 
 //load a big, tsv file from a DwC-A download
 val df = spark.
@@ -761,8 +761,8 @@ val df = spark.
     option("ignoreLeadingWhiteSpace", "true").
     load("/Users/shorthoused/Downloads/GBIF/occurrence.txt").
     select(terms.map(col): _*).
-    filter($"kingdomKey".isin(kingdomKeys: _*)).
-    filter($"datasetKey".isin(datasetKeys: _*)).
+    filter($"kingdomKey".isin(kingdomKeys:_*)).
+    filter($"datasetKey".isin(datasetKeys:_*)).
     withColumnRenamed("mediaType", "hasImage").
     withColumn("hasImage", when($"hasImage".contains("StillImage"), 1).otherwise(lit(null))).
     withColumn("hasCoordinate", when($"hasCoordinate".contains("true"), 1).otherwise(lit(null))).
