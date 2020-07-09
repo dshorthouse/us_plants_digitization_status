@@ -140,5 +140,27 @@ val idigbio = df.
     option("escape", "\"").
     csv("idigbio_institutionCode_summmary")
 
+//Get the list of iDigBio recordsets so we can whittle them down to those that are US-based
+val lists = spark.
+    read.
+    format("csv").
+    option("header", "true").
+    option("mode", "DROPMALFORMED").
+    option("delimiter", ",").
+    option("quote", "\"").
+    option("escape", "\"").
+    option("treatEmptyValuesAsNulls", "true").
+    option("ignoreLeadingWhiteSpace", "true").
+    load("/Users/shorthoused/Scripts/us_plants_digitization_status/idigbio_us_datasets.csv").
+    withColumnRenamed("uuid", "lists_uuid")
 
-
+df.join(lists, $"datasetKey" === $"lists_uuid", "inner").
+  select("datasetKey", "name").
+  distinct.
+  repartition(1).
+  write.
+  mode("overwrite").
+  option("header", "true").
+  option("quote", "\"").
+  option("escape", "\"").
+  csv("idigbio_recordsets_list")
