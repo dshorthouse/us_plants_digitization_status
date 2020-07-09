@@ -44,8 +44,7 @@ var alt_terms = List(
 var kingdoms = List(
   "plantae",
   "chromista",
-  "fungi",
-  "algae"
+  "fungi"
 )
 
 //load a big, tsv file from a DwC-A download
@@ -119,7 +118,7 @@ val idigbio = df.
     join(df2, $"df1_coreid" === $"df2_coreid", "leftouter").
     groupBy("institutionCode").
     agg(
-      count("coreid").alias("total"),
+      count("df1_coreid").alias("total"),
       count("collectionCode").alias("has_collectionCode"),
       count("catalogNumber").alias("has_catalogNumber"),
       count("scientificName").alias("has_scientificName"),
