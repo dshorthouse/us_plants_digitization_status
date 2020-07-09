@@ -11,10 +11,6 @@ gbif_us_dataset <- read_csv("gbif_institutionCode_summmary/gbif_us_institutionCo
 #  select(has_image, total) %>%
 #  mutate(image_prop = has_image / total, .keep = "all")
 
-
-# build plot with the largest collection at first (NY: New York Botanical Garden)
-ny_gbif_us_dataset <- gbif_us_dataset %>% dplyr::filter(institutionCode == "NY" | institutionCode == "UA")
-
 # Vector color
 numeric_institutions <- gbif_us_dataset$institutionCode %>% as.factor() %>% as.numeric()
 my_colors <- colors()[numeric_institutions*11]
