@@ -1,0 +1,15 @@
+	coverage	mids	colour
+has_institutionCode	full	0	orange
+has_scientificName	full	1	purple
+has_catalogNumber	good	0	orange
+has_collectionCode	good	0	orange
+has_countryCode	good		
+has_speciesKey	mid		
+has_locality	mid	1	purple
+has_eventDate	mid	1	purple
+has_recordedBy	mid		blue
+has_coordinates	bad	2	teal
+has_identifiedBy	bad		
+has_image	bad	2	teal
+has_dateIdentified	bad		
+has_higherGeography	bad	1	purple
