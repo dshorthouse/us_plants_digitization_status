@@ -24,3 +24,13 @@ my_colors <- colors()[numeric_institutions*11]
 # Make the graph !
 parcoord(percentage_gbif_us_dataset, col = my_colors)
 
+library(GGally)
+# add back in the institutionCode
+percentage_gbif_us_dataset <- cbind(percentage_gbif_us_dataset, gbif_us_dataset$institutionCode)
+colnames(percentage_gbif_us_dataset)[13] <- "institutionCode"
+parcordd_plot <- ggparcoord(data = percentage_gbif_us_dataset, columns = 1:12, groupColumn = 13)
+parcordd_plot
+
+p <- ggparcoord(data = iris, columns = 1:4, groupColumn = 5, order = "anyClass")
+p
+
