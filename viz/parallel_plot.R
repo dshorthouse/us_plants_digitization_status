@@ -68,8 +68,7 @@ gbif_us_dataset <- read_csv("gbif_institutionCode_summmary/gbif_us_institutionCo
 
 generate_ggally_parcoord_plot <- function(gbif_us_dataset) {
   # Sort columns based on MIDS level
-  gbif_us_dataset <- gbif_us_dataset %>% relocate(has_collectionCode, has_catalogNumber, has_countryCode, has_higherGeography, has_locality, has_eventDate, has_dateIdentified, has_identifiedBy, has_recordedBy, has_image, has_coordinates, has_speciesKey)
-  
+  gbif_us_dataset <- gbif_us_dataset %>% relocate(has_catalogNumber, has_collectionCode, has_countryCode, has_speciesKey, has_locality, has_eventDate, has_recordedBy, has_coordinates, has_identifiedBy, has_image, has_dateIdentified, has_higherGeography)  
   # Generate percentage of totals as data
   percentage_gbif_us_dataset <- gbif_us_dataset[, 1:12] %>%
     mutate(across(everything()), . / gbif_us_dataset$total) 

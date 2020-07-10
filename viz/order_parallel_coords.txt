@@ -1,0 +1,20 @@
+gbif_us_dataset <- gbif_us_dataset %>% relocate(
+#good
+has_catalogNumber
+has_collectionCode
+has_countryCode
+
+#mid
+has_speciesKey
+has_locality
+has_eventDate
+has_recordedBy
+
+
+
+# bad
+has_coordinates
+has_identifiedBy
+has_image
+has_dateIdentified
+has_higherGeography
