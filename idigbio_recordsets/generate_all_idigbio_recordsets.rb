@@ -11,8 +11,8 @@ response = RestClient.get(url)
 data = JSON.parse(response, { symbolize_names: true })
 datasets = data[:items].map{|d| d.slice(:uuid, :data)}
 
-CSV.open("idigbio_us_datasets.csv", "w") do |csv|
-  csv << ["uuid", "name"]
+CSV.open("idigbio_recordsets_all.csv", "w") do |csv|
+  csv << ["recordset_uuid", "name"]
   datasets.each do |dataset|
     next if dataset[:data].empty?
     puts dataset[:data][:collection_name].green
