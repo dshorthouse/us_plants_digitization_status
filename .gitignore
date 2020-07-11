@@ -6,3 +6,6 @@
 .byebug_history
 .DS_Store
 *_avro
+._SUCCESS.*
+_SUCCESS
+.part*
