@@ -1,4 +1,4 @@
-# Apache Spark Set-Up and Queries
+# Apache Spark Set-Up and Queries for GBIF
 
 Downloaded dataset from GBIF: [https://doi.org/10.15468/dl.sbuavy](https://doi.org/10.15468/dl.sbuavy)
 
@@ -14,7 +14,7 @@ import org.apache.spark.sql.types._
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.avro._
 
-// Generate from gbif_us_datasets.rb
+// Generated from gbif_datasets/gbif_us_datasets.rb
 val datasetKeys = List(
   "4fa7b334-ce0d-4e88-aaae-2e0c138d049e",
   "50c9509d-22c7-4a22-a47d-8c48425ef4a7",
@@ -717,7 +717,7 @@ val datasetKeys = List(
   "85206c74-f762-11e1-a439-00145eb45e9a"
 )
 
-val terms = List(
+val occurrence_terms = List(
   "gbifID",
   "institutionCode",
   "collectionCode",
@@ -737,7 +737,6 @@ val terms = List(
   "identifiedBy",
   "dateIdentified",
   "hasCoordinate",
-  "hasGeospatialIssues",
   "mediaType"
 )
 
@@ -748,8 +747,8 @@ var kingdomKeys = List(
   "6"
 )
 
-//load a big, tsv file from a DwC-A download
-val df = spark.
+//make a DataFrame from GBIF's occurrence.txt
+val gbif = spark.
     read.
     format("csv").
     option("header", "true").
@@ -760,25 +759,24 @@ val df = spark.
     option("treatEmptyValuesAsNulls", "true").
     option("ignoreLeadingWhiteSpace", "true").
     load("/Users/shorthoused/Downloads/GBIF/occurrence.txt").
-    select(terms.map(col): _*).
+    select(occurrence_terms.map(col): _*).
     filter($"kingdomKey".isin(kingdomKeys:_*)).
     filter($"datasetKey".isin(datasetKeys:_*)).
     withColumnRenamed("mediaType", "hasImage").
     withColumn("hasImage", when($"hasImage".contains("StillImage"), 1).otherwise(lit(null))).
-    withColumn("hasCoordinate", when($"hasCoordinate".contains("true"), 1).otherwise(lit(null))).
-    withColumn("hasGeospatialIssues", when($"hasGeospatialIssues".contains("true"), 1).otherwise(lit(null)))
+    withColumn("hasCoordinate", when($"hasCoordinate".contains("true"), 1).otherwise(lit(null)))
 
 //optionally save the DataFrame to disk so we don't have to do the above again
-df.write.mode("overwrite").format("avro").save("gbif_us_plants")
+gbif.write.mode("overwrite").format("avro").save("gbif_plants_avro")
 
 //load the saved DataFrame, can later skip the above processes and start from here
-val df = spark.
+val gbif = spark.
     read.
     format("avro").
-    load("gbif_us_plants")
+    load("gbif_plants_avro")
 
 //Save distinct list of institutionCode, collectionCode
-df.groupBy("institutionCode").
+gbif.groupBy("institutionCode").
   agg(
     count("gbifID").alias("total"),
     count("collectionCode").alias("has_collectionCode"),
@@ -804,5 +802,5 @@ df.groupBy("institutionCode").
   option("escape", "\"").
   csv("gbif_institutionCode_summmary")
 
-
+```
 
