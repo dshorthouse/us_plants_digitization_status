@@ -24,6 +24,7 @@ library(ggplot2)
 ```{r gbif_idigbio_data_prep}
 # import the iDigBio data dump
 idigbio_us_dataset <- read_csv("../../../idigbio_institutionCode_summmary/idigbio_institutionCode_MIDS_2020.07.11.csv")
+idigbio_us_dataset <- rename(idigbio_us_dataset, institutionCode = or_institutionCode) # consistency with gbif dataset
 
 # import the GBIF data dump
 gbif_us_dataset <- read_csv("../../../gbif_institutionCode_summmary/gbif_us_institutionCode_MIDS_2020.07.08.csv")
@@ -35,16 +36,16 @@ gbif_us_dataset <- read_csv("../../../gbif_institutionCode_summmary/gbif_us_inst
 percentage_pivot <- function(us_dataset) {
 
   # Generate percentage of totals as data
-  percentage_gbif_us_dataset <- us_dataset[, 3:ncol(us_dataset)] %>%
+  percentage_us_dataset <- us_dataset[, 3:ncol(us_dataset)] %>%
     mutate(across(everything()), . / us_dataset$total) %>% cbind(., us_dataset$institutionCode)
-  colnames(percentage_gbif_us_dataset)[15] <- "institutionCode" # clean up yucky column name after cbind operation
+  colnames(percentage_us_dataset)[ncol(percentage_us_dataset)] <- "institutionCode" # clean up yucky column name after cbind operation
   
   # Convert data to a long format
-  pivoted_percentage_gbif_us_dataset <- pivot_longer(percentage_gbif_us_dataset, -institutionCode, names_to = "variable", values_to = "coverage")
+  pivoted_percentage_us_dataset <- pivot_longer(percentage_us_dataset, -institutionCode, names_to = "variable", values_to = "coverage")
   
-  pivoted_percentage_gbif_us_dataset$variable <- as.factor(pivoted_percentage_gbif_us_dataset$variable) # prepare data type for violin plots
+  pivoted_percentage_us_dataset$variable <- as.factor(pivoted_percentage_us_dataset$variable) # prepare data type for violin plots
   
-  return(pivoted_percentage_gbif_us_dataset)
+  return(pivoted_percentage_us_dataset)
 }
 ```
 
@@ -52,6 +53,8 @@ percentage_pivot <- function(us_dataset) {
 gbif_pivoted_percentage_us_dataset <- percentage_pivot(gbif_us_dataset)
 gbif_pivoted_percentage_us_dataset
 ```
+
+
 ```{r}
 idigbio_pivoted_percentage_us_dataset <- percentage_pivot(idigbio_us_dataset)
 idigbio_pivoted_percentage_us_dataset
@@ -59,15 +62,15 @@ idigbio_pivoted_percentage_us_dataset
 
 
 ```{r}
-# Sort columns based on MIDS level
-gbif_us_dataset <- gbif_us_dataset %>% relocate(has_catalogNumber, has_collectionCode, has_countryCode, has_speciesKey, has_locality, has_eventDate, has_recordedBy, has_coordinates, has_image, has_identifiedBy, has_dateIdentified, has_higherGeography)
+merged_pivoted_percentage_us_dataset <- bind_rows(idigbio = idigbio_pivoted_percentage_us_dataset, gbif = gbif_pivoted_percentage_us_dataset, .id = "data_provider")
+
+merged_pivoted_percentage_us_dataset$data_provider <- as.factor(merged_pivoted_percentage_us_dataset$data_provider) # prepare data type for violin plots
+merged_pivoted_percentage_us_dataset
 ```
 
-
-```{r}
-p <- ggplot(pivoted_percentage_gbif_us_dataset, aes(x=variable, y=coverage)) + 
-  geom_violin(scale = "width") + coord_flip() + stat_summary(fun=median, geom="point", size=2, color="red") + scale_color_brewer(palette="Dark2") # median points in red
-
+```{r echo=FALSE}
+p <- ggplot(merged_pivoted_percentage_us_dataset, aes(x=variable, y=coverage)) + 
+  geom_violin(scale = "width", aes(fill = factor(data_provider))) + coord_flip() 
 p
 ```
 
