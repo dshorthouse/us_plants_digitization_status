@@ -9,3 +9,4 @@
 ._SUCCESS.*
 _SUCCESS
 .part*
+.Rproj.user
