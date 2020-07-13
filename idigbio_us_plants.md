@@ -658,8 +658,11 @@ val occurrence_raw = spark.
     load("idigbio_plants_occurrence_raw_avro")
 
 val idigbio = occurrence.
-    join(occurrence_raw, $"o_coreid" === $"or_coreid", "leftouter").
-    groupBy("or_institutionCode").
+    join(occurrence_raw, $"o_coreid" === $"or_coreid", "inner")
+
+idigbio.write.mode("overwrite").format("avro").save("idigbio_plants_combined_avro")
+
+idigbio.groupBy("or_institutionCode").
     agg(
       count("o_coreid").alias("total"),
       count("or_collectionCode").alias("has_collectionCode"),

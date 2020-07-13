@@ -22,7 +22,7 @@ val gbif = spark.
 val idigbio = spark.
     read.
     format("avro").
-    load("idigbio_plants_occurrence_raw_avro")
+    load("idigbio_plants_combined_avro")
 
 val common = gbif.
     join(idigbio, $"institutionCode" === $"or_institutionCode" && $"collectionCode" === $"or_collectionCode" && $"catalogNumber" === $"or_catalogNumber", "inner").
