@@ -1,0 +1,34 @@
+---
+title: "US Plants Digitization Status"
+author: "Jocelyn Pender"
+date: "13/07/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Import libraries
+
+```{r}
+library(tidyverse)
+
+```
+
+
+## Data import and prep
+
+```{r}
+
+gbif_comp_data <- read_csv("../../gbif_idigbio_comparisons/uniqueToGBIF.csv/part-00000-f7b7ac11-6d14-485d-b267-f561b250854f-c000.csv")
+
+idigbio_comp_data <- read_csv("../../gbif_idigbio_comparisons/uniqueToiDigBio.csv/part-00000-1f0aa97b-9a00-4a6c-8261-42edd930f1d8-c000.csv")
+
+common_comp_data <- read_csv("../../gbif_idigbio_comparisons/commonToGBIFiDigBio.csv/part-00000-858a2b61-01e8-4ee9-88df-8003a3bcefd7-c000.csv")
+
+idigbio_comp_data <- idigbio_comp_data %>% rename(institutionCode = or_institutionCode)
+
+joined_comp_data <- full_join(gbif_comp_data, idigbio_comp_data)
+joined_comp_data <- full_join(joined_comp_data, common_comp_data)
+```
