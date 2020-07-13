@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r}
 library(tidyverse)
-
+library(networkD3)
 ```
 
 
@@ -31,4 +31,47 @@ idigbio_comp_data <- idigbio_comp_data %>% rename(institutionCode = or_instituti
 
 joined_comp_data <- full_join(gbif_comp_data, idigbio_comp_data)
 joined_comp_data <- full_join(joined_comp_data, common_comp_data)
+
+
+
 ```
+
+```{r}
+total_num_specimens <- c(78694916)
+gbif_idigbio_sums <- joined_comp_data[,2:4] %>% summarise_all(sum, na.rm=TRUE)
+sankey_sums <- c(gbif_idigbio_sums, total_num_specimens)
+names(sankey_sums)[4] <- "total_num_specimens"
+```
+
+
+```{r}
+total_idigbio <- sankey_sums$uniqueToiDigBio + sankey_sums$commonToGBIFiDigBio
+total_unknown <- 51137436 #sankey_sums$total_num_specimens - total_idigbio - sankey_sums$uniqueToGBIF
+
+# A connection data frame is a list of flows with intensity for each flow
+links <- data.frame(source=c("total", "total", "total", "idigbio"),
+                    target=c("idigbio","gbif","unknown","gbif"),
+                    value=c(total_idigbio, sankey_sums$uniqueToGBIF, total_unknown, sankey_sums$uniqueToiDigBio))
+```
+
+
+
+```{r}
+# From these flows we need to create a node data frame: it lists every entities involved in the flow
+nodes <- data.frame(
+  name=c(as.character(links$source), 
+  as.character(links$target)) %>% unique()
+)
+ 
+# With networkD3, connection must be provided using id, not using real name like in the links dataframe.. So we need to reformat it.
+links$IDsource <- match(links$source, nodes$name)-1 
+links$IDtarget <- match(links$target, nodes$name)-1
+ 
+# Make the Network
+p <- sankeyNetwork(Links = links, Nodes = nodes,
+              Source = "IDsource", Target = "IDtarget",
+              Value = "value", NodeID = "name", 
+              sinksRight=FALSE)
+p
+```
+
