@@ -7,6 +7,7 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(fig.width=8, fig.height=10) 
 ```
 
 ## Import libraries
@@ -19,59 +20,67 @@ library(networkD3)
 
 ## Data import and prep
 
-```{r}
+```{r dataprep}
 
-gbif_comp_data <- read_csv("../../gbif_idigbio_comparisons/uniqueToGBIF.csv/part-00000-f7b7ac11-6d14-485d-b267-f561b250854f-c000.csv")
+gbif_comp_data <- read_csv("../../gbif_idigbio_comparisons/uniqueToGBIF.csv/part-00000-152c3e61-8f99-4970-8ed6-3e86eb524027-c000.csv")
 
-idigbio_comp_data <- read_csv("../../gbif_idigbio_comparisons/uniqueToiDigBio.csv/part-00000-1f0aa97b-9a00-4a6c-8261-42edd930f1d8-c000.csv")
+idigbio_comp_data <- read_csv("../../gbif_idigbio_comparisons/uniqueToiDigBio.csv/part-00000-d4581e18-be6d-4c43-9f99-8d2643a24e9f-c000.csv")
 
-common_comp_data <- read_csv("../../gbif_idigbio_comparisons/commonToGBIFiDigBio.csv/part-00000-858a2b61-01e8-4ee9-88df-8003a3bcefd7-c000.csv")
+common_comp_data <- read_csv("../../gbif_idigbio_comparisons/commonToGBIFiDigBio.csv/part-00000-cf004e35-1fdf-4f98-b9a4-8f8ba5879b1c-c000.csv")
 
 idigbio_comp_data <- idigbio_comp_data %>% rename(institutionCode = or_institutionCode)
 
 joined_comp_data <- full_join(gbif_comp_data, idigbio_comp_data)
 joined_comp_data <- full_join(joined_comp_data, common_comp_data)
-
-
-
 ```
 
-```{r}
+```{r stats}
 total_num_specimens <- c(78694916)
 gbif_idigbio_sums <- joined_comp_data[,2:4] %>% summarise_all(sum, na.rm=TRUE)
 sankey_sums <- c(gbif_idigbio_sums, total_num_specimens)
 names(sankey_sums)[4] <- "total_num_specimens"
 ```
 
+#### Prepare data for use in Sankey diagram
 
-```{r}
+```{r links}
 total_idigbio <- sankey_sums$uniqueToiDigBio + sankey_sums$commonToGBIFiDigBio
-total_unknown <- 51137436 #sankey_sums$total_num_specimens - total_idigbio - sankey_sums$uniqueToGBIF
+total_unknown <- sankey_sums$total_num_specimens - total_idigbio - sankey_sums$uniqueToGBIF
 
 # A connection data frame is a list of flows with intensity for each flow
-links <- data.frame(source=c("total", "total", "total", "idigbio"),
-                    target=c("idigbio","gbif","unknown","gbif"),
+links <- data.frame(source=c("Total Number of US Specimens", "Total Number of US Specimens", "Total Number of US Specimens", "iDigBio"),
+                    target=c("iDigBio","GBIF","Not Available in GBIF or iDigBio","GBIF"),
                     value=c(total_idigbio, sankey_sums$uniqueToGBIF, total_unknown, sankey_sums$uniqueToiDigBio))
+
+links$group <- as.factor(c("type_idigbio","type_gbif","type_unknown","type_gbif"))
+
 ```
 
+### Generate sankey plot
 
-
-```{r}
+```{r sankey}
 # From these flows we need to create a node data frame: it lists every entities involved in the flow
 nodes <- data.frame(
   name=c(as.character(links$source), 
   as.character(links$target)) %>% unique()
 )
+
+nodes$group <- as.factor(c("my_unique_group"))
+
  
 # With networkD3, connection must be provided using id, not using real name like in the links dataframe.. So we need to reformat it.
 links$IDsource <- match(links$source, nodes$name)-1 
 links$IDtarget <- match(links$target, nodes$name)-1
  
+#my_color <- 'd3.scaleOrdinal() .domain(["total", "idigbio","gbif", "unknown"]) .range(["blue", "blue" , "blue", "red"])'
+my_color <- 'd3.scaleOrdinal() .domain(["type_idigbio", "type_gbif", "type_unknown"]) .range(["steelblue", "#69b3a2", "#f0c546", "grey"])'
+
 # Make the Network
 p <- sankeyNetwork(Links = links, Nodes = nodes,
               Source = "IDsource", Target = "IDtarget",
               Value = "value", NodeID = "name", 
-              sinksRight=FALSE)
+              sinksRight=TRUE, fontSize = 15, fontFamily = "sans-serif",
+              colourScale=my_color, LinkGroup="group", NodeGroup="group")
 p
 ```
 
