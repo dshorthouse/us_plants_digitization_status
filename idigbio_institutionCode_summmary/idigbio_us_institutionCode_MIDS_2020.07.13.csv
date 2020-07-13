@@ -1,4 +1,4 @@
-or_institutionCode,total,has_collectionCode,has_catalogNumber,has_scientificName,has_acceptedNameUsage,has_locality,has_countryCode,has_coordinates,has_image,has_dateIdentified,has_identifiedBy,has_recordedBy,has_eventDate
+institutionCode,total,has_collectionCode,has_catalogNumber,has_scientificName,has_acceptedNameUsage,has_locality,has_countryCode,has_coordinates,has_image,has_dateIdentified,has_identifiedBy,has_recordedBy,has_eventDate
 MOR,103505,85840,103505,103505,0,95341,103346,18063,58292,3089,16943,103064,101046
 UCSB,36815,36815,36815,36814,0,36803,36813,17687,28,8,6,36245,36409
 BLMMD,4700,4700,4700,4700,4630,4089,4552,1460,2536,1,2948,4611,4500
