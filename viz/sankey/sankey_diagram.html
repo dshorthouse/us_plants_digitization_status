@@ -1906,25 +1906,25 @@ $(document).ready(function () {
 </div>
 <div id="data-import-and-prep" class="section level2">
 <h2>Data import and prep</h2>
-<pre class="r"><code>gbif_comp_data &lt;- read_csv(&quot;../../gbif_idigbio_comparisons/uniqueToGBIF.csv/part-00000-152c3e61-8f99-4970-8ed6-3e86eb524027-c000.csv&quot;)</code></pre>
+<pre class="r"><code>gbif_comp_data &lt;- read_csv(&quot;../../gbif_idigbio_comparisons/uniqueToGBIF.csv/cleaned_part-00000-152c3e61-8f99-4970-8ed6-3e86eb524027-c000-csv.csv&quot;)</code></pre>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   institutionCode = col_character(),
 ##   uniqueToGBIF = col_double()
 ## )</code></pre>
-<pre class="r"><code>idigbio_comp_data &lt;- read_csv(&quot;../../gbif_idigbio_comparisons/uniqueToiDigBio.csv/part-00000-d4581e18-be6d-4c43-9f99-8d2643a24e9f-c000.csv&quot;)</code></pre>
+<pre class="r"><code>idigbio_comp_data &lt;- read_csv(&quot;../../gbif_idigbio_comparisons/uniqueToiDigBio.csv/cleaned_part-00000-d4581e18-be6d-4c43-9f99-8d2643a24e9f-c000-csv.csv&quot;)</code></pre>
 <pre><code>## Parsed with column specification:
 ## cols(
-##   or_institutionCode = col_character(),
+##   institutionCode = col_character(),
 ##   uniqueToiDigBio = col_double()
 ## )</code></pre>
-<pre class="r"><code>common_comp_data &lt;- read_csv(&quot;../../gbif_idigbio_comparisons/commonToGBIFiDigBio.csv/part-00000-cf004e35-1fdf-4f98-b9a4-8f8ba5879b1c-c000.csv&quot;)</code></pre>
+<pre class="r"><code>common_comp_data &lt;- read_csv(&quot;../../gbif_idigbio_comparisons/commonToGBIFiDigBio.csv/cleaned_part-00000-cf004e35-1fdf-4f98-b9a4-8f8ba5879b1c-c000-csv.csv&quot;)</code></pre>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   institutionCode = col_character(),
 ##   commonToGBIFiDigBio = col_double()
 ## )</code></pre>
-<pre class="r"><code>idigbio_comp_data &lt;- idigbio_comp_data %&gt;% rename(institutionCode = or_institutionCode)
+<pre class="r"><code># idigbio_comp_data &lt;- idigbio_comp_data %&gt;% rename(institutionCode = or_institutionCode)
 
 joined_comp_data &lt;- full_join(gbif_comp_data, idigbio_comp_data)</code></pre>
 <pre><code>## Joining, by = &quot;institutionCode&quot;</code></pre>
@@ -1971,8 +1971,8 @@ p &lt;- sankeyNetwork(Links = links, Nodes = nodes,
               sinksRight=TRUE, fontSize = 15, fontFamily = &quot;sans-serif&quot;,
               colourScale=my_color, LinkGroup=&quot;group&quot;, NodeGroup=&quot;group&quot;)
 p</code></pre>
-<div id="htmlwidget-7347bd99c9cd944acc8c" style="width:768px;height:960px;" class="sankeyNetwork html-widget"></div>
-<script type="application/json" data-for="htmlwidget-7347bd99c9cd944acc8c">{"x":{"links":{"source":[0,0,0,1],"target":[1,2,3,2],"value":[34259516,8566833,35868567,15659311],"group":["type_idigbio","type_gbif","type_unknown","type_gbif"]},"nodes":{"name":["Total Number of US Specimens","iDigBio","GBIF","Not Available in GBIF or iDigBio"],"group":["my_unique_group","my_unique_group","my_unique_group","my_unique_group"]},"options":{"NodeID":"name","NodeGroup":"group","LinkGroup":"group","colourScale":"d3.scaleOrdinal() .domain([\"type_idigbio\", \"type_gbif\", \"type_unknown\"]) .range([\"steelblue\", \"#69b3a2\", \"#f0c546\", \"grey\"])","fontSize":15,"fontFamily":"sans-serif","nodeWidth":15,"nodePadding":10,"units":"","margin":{"top":null,"right":null,"bottom":null,"left":null},"iterations":32,"sinksRight":true}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-ee1294de3d0f23e60673" style="width:1152px;height:768px;" class="sankeyNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-ee1294de3d0f23e60673">{"x":{"links":{"source":[0,0,0,1],"target":[1,2,3,2],"value":[34856352,9172635,34665929,15794295],"group":["type_idigbio","type_gbif","type_unknown","type_gbif"]},"nodes":{"name":["Total Number of US Specimens","iDigBio","GBIF","Not Available in GBIF or iDigBio"],"group":["my_unique_group","my_unique_group","my_unique_group","my_unique_group"]},"options":{"NodeID":"name","NodeGroup":"group","LinkGroup":"group","colourScale":"d3.scaleOrdinal() .domain([\"type_idigbio\", \"type_gbif\", \"type_unknown\"]) .range([\"steelblue\", \"#69b3a2\", \"#f0c546\", \"grey\"])","fontSize":15,"fontFamily":"sans-serif","nodeWidth":15,"nodePadding":10,"units":"","margin":{"top":null,"right":null,"bottom":null,"left":null},"iterations":32,"sinksRight":true}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 
