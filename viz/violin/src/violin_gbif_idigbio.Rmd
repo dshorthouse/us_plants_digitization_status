@@ -7,7 +7,7 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-knitr::opts_chunk$set(fig.width=8, fig.height=10) 
+knitr::opts_chunk$set(fig.width=8, fig.height=5) 
 
 ```
 
@@ -23,11 +23,11 @@ library(ggplot2)
 
 ```{r gbif_idigbio_data_prep}
 # import the iDigBio data dump
-idigbio_us_dataset <- read_csv("../../../idigbio_institutionCode_summmary/idigbio_institutionCode_MIDS_2020.07.11.csv")
-idigbio_us_dataset <- rename(idigbio_us_dataset, institutionCode = or_institutionCode) # consistency with gbif dataset
+idigbio_us_dataset <- read_csv("../../../gbif_idigbio_institutionCode_summary_cleaned/cleaned_idigbio_us_institutionCode_MIDS_2020-07-13-csv.csv")
+# idigbio_us_dataset <- rename(idigbio_us_dataset, institutionCode = or_institutionCode) # consistency with gbif dataset
 
 # import the GBIF data dump
-gbif_us_dataset <- read_csv("../../../gbif_institutionCode_summmary/gbif_us_institutionCode_MIDS_2020.07.08.csv")
+gbif_us_dataset <- read_csv("../../../gbif_idigbio_institutionCode_summary_cleaned/cleaned_gbif_us_institutionCode_MIDS_2020.07.08.csv")
 ```
 
 
@@ -69,8 +69,11 @@ merged_pivoted_percentage_us_dataset
 ```
 
 ```{r echo=FALSE}
-p <- ggplot(merged_pivoted_percentage_us_dataset, aes(x=variable, y=coverage)) + 
+subset_merged_pivoted_percentage_us_dataset <- merged_pivoted_percentage_us_dataset %>% filter(variable == "has_image" | variable == "has_identifiedBy" | variable == "has_eventDate" | variable == "has_acceptedNameUsage")
+
+p <- ggplot(subset_merged_pivoted_percentage_us_dataset, aes(x=variable, y=coverage)) + 
   geom_violin(scale = "width", aes(fill = factor(data_provider))) + coord_flip() 
 p
+ggsave("violin_selected.pdf")
 ```
 
