@@ -1,6 +1,10 @@
 # Apache Spark Set-Up and Queries for iDigBio
 
 Downloaded dataset from iDigBio from the iDigBio download API, generated 2020-07-05
+https://api.idigbio.org/v2/download/?rq=
+
+Download status Oct 5
+https://api.idigbio.org/v2/download/3586f59b-dd81-48b2-a1ab-f1d70b0325ca
 
 ```json
 rq = { "basisofrecord": [ "Specimen", "PreservedSpecimen", "FossilSpecimen" ]}
@@ -564,10 +568,15 @@ val occurrence_terms = List(
   "dwc:occurrenceID",
   "dwc:kingdom",
   "dwc:scientificName",
+  "dwc:typeStatus",
   "idigbio:recordset",
-  "dwc:locality",
+  "dwc:continent",
   "idigbio:isoCountryCode",
+  "dwc:stateProvince",
+  "dwc:county",
+  "dwc:locality",
   "dwc:recordedBy",
+  "dwc:recordNumber",
   "dwc:eventDate",
   "idigbio:geoPoint",
   "idigbio:hasImage"
@@ -584,20 +593,25 @@ val occurrence = spark.
     option("escape", "\"").
     option("treatEmptyValuesAsNulls", "true").
     option("ignoreLeadingWhiteSpace", "true").
-    load("/Users/shorthoused/Downloads/iDigBio/occurrence.csv").
+    load("/Users/dshorthouse/Downloads/GBIF/occurrence.csv").
     select(occurrence_terms.map(col):_*).
     filter(lower($"dwc:kingdom").isin(kingdoms:_*)).
     filter($"idigbio:recordset".isin(recordsets:_*)).
     withColumnRenamed("idigbio:uuid", "o_uuid").
+    withColumnRenamed("idigbio:recordset", "o_recordSet").
     withColumnRenamed("dwc:institutionCode", "o_institutionCode").
     withColumnRenamed("dwc:collectionCode", "o_collectionCode").
     withColumnRenamed("dwc:catalogNumber", "o_catalogNumber").
     withColumnRenamed("dwc:occurrenceID", "o_occurrenceID").
     withColumnRenamed("dwc:kingdom", "o_kingdom").
     withColumnRenamed("dwc:scientificName", "o_scientificName").
+    withColumnRenamed("dwc:typeStatus", "o_typeStatus").
+    withColumnRenamed("dwc:continent", "o_continent").
+    withColumnRenamed("dwc:stateProvince", "o_stateProvince").
+    withColumnRenamed("dwc:county", "o_county").
     withColumnRenamed("dwc:locality", "o_locality").
-    withColumnRenamed("idigbio:recordset", "o_recordSet").
     withColumnRenamed("idigbio:isoCountryCode", "o_isoCountryCode").
+    withColumnRenamed("dwc:recordNumber", "o_recordNumber").
     withColumnRenamed("dwc:recordedBy", "o_recordedBy").
     withColumnRenamed("dwc:eventDate", "o_eventDate").
     withColumnRenamed("idigbio:geoPoint", "o_hasCoordinate").
@@ -624,7 +638,15 @@ var occurrence_raw_terms = List(
   "dwc:occurrenceID",
   "dwc:identifiedBy",
   "dwc:dateIdentified",
-  "dwc:acceptedNameUsage"
+  "dwc:acceptedNameUsage",
+  "dwc:preparations",
+  "dwc:scientificNameID",
+  "dwc:identificationID",
+  "dwc:higherGeography",
+  "dwc:decimalLatitude",
+  "dwc:decimalLongitude",
+  "dwc:verbatimElevation",
+  "dwc:verbatimDepth"
 )
 
 //Build dataframe from occurrence_raw.csv; prefix "or_" on columns stands for occurrence_raw
@@ -638,7 +660,7 @@ val occurrence_raw = spark.
   option("escape", "\"").
   option("treatEmptyValuesAsNulls", "true").
   option("ignoreLeadingWhiteSpace", "true").
-  load("/Users/shorthoused/Downloads/iDigBio/occurrence_raw.csv").
+  load("/Users/dshorthouse/Downloads/GBIF/occurrence_raw.csv").
   select(occurrence_raw_terms.map(col):_*).
   withColumnRenamed("dwc:institutionCode", "or_institutionCode").
   withColumnRenamed("dwc:collectionCode", "or_collectionCode").
@@ -647,6 +669,14 @@ val occurrence_raw = spark.
   withColumnRenamed("dwc:identifiedBy", "or_identifiedBy").
   withColumnRenamed("dwc:dateIdentified", "or_dateIdentified").
   withColumnRenamed("dwc:acceptedNameUsage", "or_acceptedNameUsage").
+  withColumnRenamed("dwc:preparations", "or_preparations").
+  withColumnRenamed("dwc:scientificNameID", "or_scientificNameID").
+  withColumnRenamed("dwc:identificationID", "or_identificationID").
+  withColumnRenamed("dwc:higherGeography", "or_higherGeography").
+  withColumnRenamed("dwc:decimalLatitude", "or_decimalLatitude").
+  withColumnRenamed("dwc:decimalLongitude", "or_decimalLongitude").
+  withColumnRenamed("dwc:verbatimElevation", "or_verbatimElevation").
+  withColumnRenamed("dwc:verbatimDepth", "or_verbatimDepth").
   withColumnRenamed("coreid", "or_coreid")
 
 occurrence_raw.write.mode("overwrite").format("avro").save("idigbio_plants_occurrence_raw_avro")
@@ -667,16 +697,28 @@ idigbio.groupBy("or_institutionCode").
       count("o_coreid").alias("total"),
       count("or_collectionCode").alias("has_collectionCode"),
       count("or_catalogNumber").alias("has_catalogNumber"),
+      count("or_preparations").alias("has_preparations"),
       count("o_scientificName").alias("has_scientificName"),
+      count("or_scientificNameID").alias("has_scientificNameID"),
       count("or_acceptedNameUsage").alias("has_acceptedNameUsage"),
+      count("or_identificationID").alias("has_identificationID"),
       count("o_locality").alias("has_locality"),
+      count("or_higherGeography").alias("has_higherGeography"),
+      count("o_continent").alias("has_continent"),
       count("o_isoCountryCode").alias("has_countryCode"),
+      count("o_stateProvince").alias("has_stateProvince"),
+      count("o_county").alias("has_county"),
+      count("or_decimalLatitude").alias("has_decimalLatitude"),
+      count("or_decimalLongitude").alias("has_decimalLongitude"),
       count("o_hasCoordinate").alias("has_coordinates"),
+      count("or_verbatimElevation").alias("has_verbatimElevation"),
+      count("or_verbatimDepth").alias("has_verbatimDepth"),
       count("o_hasImage").alias("has_image"),
       count("or_dateIdentified").alias("has_dateIdentified"),
       count("or_identifiedBy").alias("has_identifiedBy"),
       count("o_recordedBy").alias("has_recordedBy"),
-      count("o_eventDate").alias("has_eventDate")
+      count("o_eventDate").alias("has_eventDate"),
+      count("o_recordNumber").alias("has_recordNumber")
     ).
     repartition(1).
     write.
