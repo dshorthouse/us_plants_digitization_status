@@ -1,0 +1,81 @@
+---
+title: "US Plants Digitization Status"
+author: "Jocelyn Pender"
+date: "10/07/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(fig.width=8, fig.height=20) 
+
+```
+
+## US Plant Collections Digitization Status
+
+### Degree of Digitization, US Plant Collection Data from GBIF and iDigBio
+
+```{r cars}
+library(tidyverse)
+library(ggplot2)
+```
+
+
+```{r gbif_idigbio_data_prep}
+# import the iDigBio data dump
+idigbio_us_dataset <- read_csv("../../../gbif_idigbio_institutionCode_summary_cleaned/agg_csv/cleaned_idigbio_us_institutionCode_MIDS_2020-10-09_agg.csv")
+# idigbio_us_dataset <- rename(idigbio_us_dataset, institutionCode = or_institutionCode) # consistency with gbif dataset
+idigbio_us_dataset <- idigbio_us_dataset %>% select(-File)
+
+# import the GBIF data dump
+gbif_us_dataset <- read_csv("../../../gbif_idigbio_institutionCode_summary_cleaned/agg_csv/cleaned_gbif_us_institutionCode_MIDS_2020-10-09_agg.csv")
+gbif_us_dataset <- gbif_us_dataset %>% select(-File)
+```
+
+
+```{r data_prep}
+
+percentage_pivot <- function(us_dataset) {
+
+  # Generate percentage of totals as data
+  percentage_us_dataset <- us_dataset[, 3:ncol(us_dataset)] %>%
+    mutate(across(everything()), . / us_dataset$total) %>% cbind(., us_dataset$institutionCode)
+  colnames(percentage_us_dataset)[ncol(percentage_us_dataset)] <- "institutionCode" # clean up yucky column name after cbind operation
+  
+  # Convert data to a long format
+  pivoted_percentage_us_dataset <- pivot_longer(percentage_us_dataset, -institutionCode, names_to = "variable", values_to = "coverage")
+  
+  pivoted_percentage_us_dataset$variable <- as.factor(pivoted_percentage_us_dataset$variable) # prepare data type for violin plots
+  
+  return(pivoted_percentage_us_dataset)
+}
+```
+
+```{r}
+gbif_pivoted_percentage_us_dataset <- percentage_pivot(gbif_us_dataset)
+gbif_pivoted_percentage_us_dataset
+```
+
+
+```{r}
+idigbio_pivoted_percentage_us_dataset <- percentage_pivot(idigbio_us_dataset)
+idigbio_pivoted_percentage_us_dataset
+```
+
+
+```{r}
+merged_pivoted_percentage_us_dataset <- bind_rows(idigbio = idigbio_pivoted_percentage_us_dataset, gbif = gbif_pivoted_percentage_us_dataset, .id = "data_provider")
+
+merged_pivoted_percentage_us_dataset$data_provider <- as.factor(merged_pivoted_percentage_us_dataset$data_provider) # prepare data type for violin plots
+merged_pivoted_percentage_us_dataset
+```
+
+```{r echo=FALSE}
+subset_merged_pivoted_percentage_us_dataset <- merged_pivoted_percentage_us_dataset #%>% filter(variable == "has_image" | variable == "has_identifiedBy" | variable == "has_eventDate" | variable == "has_acceptedNameUsage")
+
+p <- ggplot(subset_merged_pivoted_percentage_us_dataset, aes(x=variable, y=coverage)) + 
+  geom_violin(scale = "width", aes(fill = factor(data_provider))) + coord_flip() 
+p
+ggsave("violin_selected.pdf")
+```
+
