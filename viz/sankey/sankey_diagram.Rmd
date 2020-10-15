@@ -22,13 +22,13 @@ library(networkD3)
 
 ```{r dataprep}
 
-gbif_comp_data <- read_csv("../../gbif_idigbio_comparisons/uniqueToGBIF.csv/cleaned_part-00000-152c3e61-8f99-4970-8ed6-3e86eb524027-c000-csv.csv")
+gbif_comp_data <- read_csv("../../gbif_idigbio_comparisons/uniqueToGBIF.csv/2020-10-09.csv")
 
-idigbio_comp_data <- read_csv("../../gbif_idigbio_comparisons/uniqueToiDigBio.csv/cleaned_part-00000-d4581e18-be6d-4c43-9f99-8d2643a24e9f-c000-csv.csv")
+idigbio_comp_data <- read_csv("../../gbif_idigbio_comparisons/uniqueToiDigBio.csv/2020-10-09.csv")
 
-common_comp_data <- read_csv("../../gbif_idigbio_comparisons/commonToGBIFiDigBio.csv/cleaned_part-00000-cf004e35-1fdf-4f98-b9a4-8f8ba5879b1c-c000-csv.csv")
+common_comp_data <- read_csv("../../gbif_idigbio_comparisons/commonToGBIFiDigBio.csv/2020-10-09.csv")
 
-# idigbio_comp_data <- idigbio_comp_data %>% rename(institutionCode = or_institutionCode)
+idigbio_comp_data <- idigbio_comp_data %>% rename(institutionCode = or_institutionCode)
 
 joined_comp_data <- full_join(gbif_comp_data, idigbio_comp_data)
 joined_comp_data <- full_join(joined_comp_data, common_comp_data)

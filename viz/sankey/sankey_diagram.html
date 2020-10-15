@@ -1890,7 +1890,7 @@ $(document).ready(function () {
 <div id="import-libraries" class="section level2">
 <h2>Import libraries</h2>
 <pre class="r"><code>library(tidyverse)</code></pre>
-<pre><code>## ── Attaching packages ──────────────────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
+<pre><code>## ── Attaching packages ────────────────────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
 <pre><code>## ✔ ggplot2 3.3.2     ✔ purrr   0.3.2
 ## ✔ tibble  3.0.2     ✔ dplyr   1.0.0
 ## ✔ tidyr   1.1.0     ✔ stringr 1.4.0
@@ -1899,32 +1899,32 @@ $(document).ready(function () {
 <pre><code>## Warning: package 'tibble' was built under R version 3.6.2</code></pre>
 <pre><code>## Warning: package 'tidyr' was built under R version 3.6.2</code></pre>
 <pre><code>## Warning: package 'dplyr' was built under R version 3.6.2</code></pre>
-<pre><code>## ── Conflicts ─────────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+<pre><code>## ── Conflicts ───────────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
 ## ✖ dplyr::filter() masks stats::filter()
 ## ✖ dplyr::lag()    masks stats::lag()</code></pre>
 <pre class="r"><code>library(networkD3)</code></pre>
 </div>
 <div id="data-import-and-prep" class="section level2">
 <h2>Data import and prep</h2>
-<pre class="r"><code>gbif_comp_data &lt;- read_csv(&quot;../../gbif_idigbio_comparisons/uniqueToGBIF.csv/cleaned_part-00000-152c3e61-8f99-4970-8ed6-3e86eb524027-c000-csv.csv&quot;)</code></pre>
+<pre class="r"><code>gbif_comp_data &lt;- read_csv(&quot;../../gbif_idigbio_comparisons/uniqueToGBIF.csv/2020-10-09.csv&quot;)</code></pre>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   institutionCode = col_character(),
 ##   uniqueToGBIF = col_double()
 ## )</code></pre>
-<pre class="r"><code>idigbio_comp_data &lt;- read_csv(&quot;../../gbif_idigbio_comparisons/uniqueToiDigBio.csv/cleaned_part-00000-d4581e18-be6d-4c43-9f99-8d2643a24e9f-c000-csv.csv&quot;)</code></pre>
+<pre class="r"><code>idigbio_comp_data &lt;- read_csv(&quot;../../gbif_idigbio_comparisons/uniqueToiDigBio.csv/2020-10-09.csv&quot;)</code></pre>
 <pre><code>## Parsed with column specification:
 ## cols(
-##   institutionCode = col_character(),
+##   or_institutionCode = col_character(),
 ##   uniqueToiDigBio = col_double()
 ## )</code></pre>
-<pre class="r"><code>common_comp_data &lt;- read_csv(&quot;../../gbif_idigbio_comparisons/commonToGBIFiDigBio.csv/cleaned_part-00000-cf004e35-1fdf-4f98-b9a4-8f8ba5879b1c-c000-csv.csv&quot;)</code></pre>
+<pre class="r"><code>common_comp_data &lt;- read_csv(&quot;../../gbif_idigbio_comparisons/commonToGBIFiDigBio.csv/2020-10-09.csv&quot;)</code></pre>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   institutionCode = col_character(),
 ##   commonToGBIFiDigBio = col_double()
 ## )</code></pre>
-<pre class="r"><code># idigbio_comp_data &lt;- idigbio_comp_data %&gt;% rename(institutionCode = or_institutionCode)
+<pre class="r"><code>idigbio_comp_data &lt;- idigbio_comp_data %&gt;% rename(institutionCode = or_institutionCode)
 
 joined_comp_data &lt;- full_join(gbif_comp_data, idigbio_comp_data)</code></pre>
 <pre><code>## Joining, by = &quot;institutionCode&quot;</code></pre>
@@ -1971,8 +1971,8 @@ p &lt;- sankeyNetwork(Links = links, Nodes = nodes,
               sinksRight=TRUE, fontSize = 15, fontFamily = &quot;sans-serif&quot;,
               colourScale=my_color, LinkGroup=&quot;group&quot;, NodeGroup=&quot;group&quot;)
 p</code></pre>
-<div id="htmlwidget-ee1294de3d0f23e60673" style="width:1152px;height:768px;" class="sankeyNetwork html-widget"></div>
-<script type="application/json" data-for="htmlwidget-ee1294de3d0f23e60673">{"x":{"links":{"source":[0,0,0,1],"target":[1,2,3,2],"value":[34856352,9172635,34665929,15794295],"group":["type_idigbio","type_gbif","type_unknown","type_gbif"]},"nodes":{"name":["Total Number of US Specimens","iDigBio","GBIF","Not Available in GBIF or iDigBio"],"group":["my_unique_group","my_unique_group","my_unique_group","my_unique_group"]},"options":{"NodeID":"name","NodeGroup":"group","LinkGroup":"group","colourScale":"d3.scaleOrdinal() .domain([\"type_idigbio\", \"type_gbif\", \"type_unknown\"]) .range([\"steelblue\", \"#69b3a2\", \"#f0c546\", \"grey\"])","fontSize":15,"fontFamily":"sans-serif","nodeWidth":15,"nodePadding":10,"units":"","margin":{"top":null,"right":null,"bottom":null,"left":null},"iterations":32,"sinksRight":true}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-9ceffe3c3de52d50be69" style="width:1152px;height:768px;" class="sankeyNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-9ceffe3c3de52d50be69">{"x":{"links":{"source":[0,0,0,1],"target":[1,2,3,2],"value":[35982779,8050484,34661653,15660101],"group":["type_idigbio","type_gbif","type_unknown","type_gbif"]},"nodes":{"name":["Total Number of US Specimens","iDigBio","GBIF","Not Available in GBIF or iDigBio"],"group":["my_unique_group","my_unique_group","my_unique_group","my_unique_group"]},"options":{"NodeID":"name","NodeGroup":"group","LinkGroup":"group","colourScale":"d3.scaleOrdinal() .domain([\"type_idigbio\", \"type_gbif\", \"type_unknown\"]) .range([\"steelblue\", \"#69b3a2\", \"#f0c546\", \"grey\"])","fontSize":15,"fontFamily":"sans-serif","nodeWidth":15,"nodePadding":10,"units":"","margin":{"top":null,"right":null,"bottom":null,"left":null},"iterations":32,"sinksRight":true}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 
