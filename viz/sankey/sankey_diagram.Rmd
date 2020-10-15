@@ -46,11 +46,12 @@ names(sankey_sums)[4] <- "total_num_specimens"
 ```{r links}
 total_idigbio <- sankey_sums$uniqueToiDigBio + sankey_sums$commonToGBIFiDigBio
 total_unknown <- sankey_sums$total_num_specimens - total_idigbio - sankey_sums$uniqueToGBIF
+total_gbif <- sankey_sums$uniqueToGBIF + sankey_sums$commonToGBIFiDigBio
 
 # A connection data frame is a list of flows with intensity for each flow
 links <- data.frame(source=c("Total Number of US Specimens", "Total Number of US Specimens", "Total Number of US Specimens", "iDigBio"),
                     target=c("iDigBio","GBIF","Not Available in GBIF or iDigBio","GBIF"),
-                    value=c(total_idigbio, sankey_sums$uniqueToGBIF, total_unknown, sankey_sums$uniqueToiDigBio))
+                    value=c(total_idigbio, sankey_sums$uniqueToGBIF, total_unknown, sankey_sums$commonToGBIFiDigBio))
 
 links$group <- as.factor(c("type_idigbio","type_gbif","type_unknown","type_gbif"))
 

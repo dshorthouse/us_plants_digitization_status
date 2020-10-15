@@ -1890,7 +1890,7 @@ $(document).ready(function () {
 <div id="import-libraries" class="section level2">
 <h2>Import libraries</h2>
 <pre class="r"><code>library(tidyverse)</code></pre>
-<pre><code>## ── Attaching packages ────────────────────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
+<pre><code>## ── Attaching packages ──────────────────────────────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
 <pre><code>## ✔ ggplot2 3.3.2     ✔ purrr   0.3.2
 ## ✔ tibble  3.0.2     ✔ dplyr   1.0.0
 ## ✔ tidyr   1.1.0     ✔ stringr 1.4.0
@@ -1899,7 +1899,7 @@ $(document).ready(function () {
 <pre><code>## Warning: package 'tibble' was built under R version 3.6.2</code></pre>
 <pre><code>## Warning: package 'tidyr' was built under R version 3.6.2</code></pre>
 <pre><code>## Warning: package 'dplyr' was built under R version 3.6.2</code></pre>
-<pre><code>## ── Conflicts ───────────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+<pre><code>## ── Conflicts ─────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
 ## ✖ dplyr::filter() masks stats::filter()
 ## ✖ dplyr::lag()    masks stats::lag()</code></pre>
 <pre class="r"><code>library(networkD3)</code></pre>
@@ -1938,11 +1938,12 @@ names(sankey_sums)[4] &lt;- &quot;total_num_specimens&quot;</code></pre>
 <h4>Prepare data for use in Sankey diagram</h4>
 <pre class="r"><code>total_idigbio &lt;- sankey_sums$uniqueToiDigBio + sankey_sums$commonToGBIFiDigBio
 total_unknown &lt;- sankey_sums$total_num_specimens - total_idigbio - sankey_sums$uniqueToGBIF
+total_gbif &lt;- sankey_sums$uniqueToGBIF + sankey_sums$commonToGBIFiDigBio
 
 # A connection data frame is a list of flows with intensity for each flow
 links &lt;- data.frame(source=c(&quot;Total Number of US Specimens&quot;, &quot;Total Number of US Specimens&quot;, &quot;Total Number of US Specimens&quot;, &quot;iDigBio&quot;),
                     target=c(&quot;iDigBio&quot;,&quot;GBIF&quot;,&quot;Not Available in GBIF or iDigBio&quot;,&quot;GBIF&quot;),
-                    value=c(total_idigbio, sankey_sums$uniqueToGBIF, total_unknown, sankey_sums$uniqueToiDigBio))
+                    value=c(total_idigbio, sankey_sums$uniqueToGBIF, total_unknown, sankey_sums$commonToGBIFiDigBio))
 
 links$group &lt;- as.factor(c(&quot;type_idigbio&quot;,&quot;type_gbif&quot;,&quot;type_unknown&quot;,&quot;type_gbif&quot;))</code></pre>
 </div>
@@ -1971,8 +1972,8 @@ p &lt;- sankeyNetwork(Links = links, Nodes = nodes,
               sinksRight=TRUE, fontSize = 15, fontFamily = &quot;sans-serif&quot;,
               colourScale=my_color, LinkGroup=&quot;group&quot;, NodeGroup=&quot;group&quot;)
 p</code></pre>
-<div id="htmlwidget-9ceffe3c3de52d50be69" style="width:1152px;height:768px;" class="sankeyNetwork html-widget"></div>
-<script type="application/json" data-for="htmlwidget-9ceffe3c3de52d50be69">{"x":{"links":{"source":[0,0,0,1],"target":[1,2,3,2],"value":[35982779,8050484,34661653,15660101],"group":["type_idigbio","type_gbif","type_unknown","type_gbif"]},"nodes":{"name":["Total Number of US Specimens","iDigBio","GBIF","Not Available in GBIF or iDigBio"],"group":["my_unique_group","my_unique_group","my_unique_group","my_unique_group"]},"options":{"NodeID":"name","NodeGroup":"group","LinkGroup":"group","colourScale":"d3.scaleOrdinal() .domain([\"type_idigbio\", \"type_gbif\", \"type_unknown\"]) .range([\"steelblue\", \"#69b3a2\", \"#f0c546\", \"grey\"])","fontSize":15,"fontFamily":"sans-serif","nodeWidth":15,"nodePadding":10,"units":"","margin":{"top":null,"right":null,"bottom":null,"left":null},"iterations":32,"sinksRight":true}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-cc4efa3c85c15cf213eb" style="width:1152px;height:768px;" class="sankeyNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-cc4efa3c85c15cf213eb">{"x":{"links":{"source":[0,0,0,1],"target":[1,2,3,2],"value":[35982779,8050484,34661653,20322678],"group":["type_idigbio","type_gbif","type_unknown","type_gbif"]},"nodes":{"name":["Total Number of US Specimens","iDigBio","GBIF","Not Available in GBIF or iDigBio"],"group":["my_unique_group","my_unique_group","my_unique_group","my_unique_group"]},"options":{"NodeID":"name","NodeGroup":"group","LinkGroup":"group","colourScale":"d3.scaleOrdinal() .domain([\"type_idigbio\", \"type_gbif\", \"type_unknown\"]) .range([\"steelblue\", \"#69b3a2\", \"#f0c546\", \"grey\"])","fontSize":15,"fontFamily":"sans-serif","nodeWidth":15,"nodePadding":10,"units":"","margin":{"top":null,"right":null,"bottom":null,"left":null},"iterations":32,"sinksRight":true}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 
