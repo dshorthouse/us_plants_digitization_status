@@ -70,10 +70,20 @@ merged_pivoted_percentage_us_dataset$data_provider <- as.factor(merged_pivoted_p
 merged_pivoted_percentage_us_dataset
 ```
 
+```{r}
+MIDS_order <- read_csv("../../../gbif_idigbio_institutionCode_summary_cleaned/MIDS_levels.csv")
+merged_pivoted_percentage_us_dataset <- merged_pivoted_percentage_us_dataset %>% full_join(MIDS_order)
+#merged_pivoted_percentage_us_dataset$MIDS <- factor(merged_pivoted_percentage_us_dataset$MIDS,levels = c("1", "2", "3", "N/A"))
+
+merged_pivoted_percentage_us_dataset <- merged_pivoted_percentage_us_dataset %>% unite("variable_MIDS", variable, MIDS_named)
+```
+
+
 ```{r echo=FALSE}
+
 subset_merged_pivoted_percentage_us_dataset <- merged_pivoted_percentage_us_dataset #%>% filter(variable == "has_image" | variable == "has_identifiedBy" | variable == "has_eventDate" | variable == "has_acceptedNameUsage")
 
-p <- ggplot(subset_merged_pivoted_percentage_us_dataset, aes(x=variable, y=coverage)) + 
+p <- ggplot(subset_merged_pivoted_percentage_us_dataset, aes(x=fct_reorder(variable_MIDS, MIDS_bumped), y=coverage)) + 
   geom_violin(scale = "width", aes(fill = factor(data_provider))) + coord_flip() 
 p
 ggsave("violin_selected.pdf")
