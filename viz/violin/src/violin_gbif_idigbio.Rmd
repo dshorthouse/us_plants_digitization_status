@@ -23,11 +23,13 @@ library(ggplot2)
 
 ```{r gbif_idigbio_data_prep}
 # import the iDigBio data dump
-idigbio_us_dataset <- read_csv("../../../gbif_idigbio_institutionCode_summary_cleaned/cleaned_idigbio_us_institutionCode_MIDS_2020-07-13-csv.csv")
+idigbio_us_dataset <- read_csv("../../../gbif_idigbio_institutionCode_summary_cleaned/agg_csv/cleaned_idigbio_us_institutionCode_MIDS_2020-10-09_agg.csv")
 # idigbio_us_dataset <- rename(idigbio_us_dataset, institutionCode = or_institutionCode) # consistency with gbif dataset
+idigbio_us_dataset <- idigbio_us_dataset %>% select(-File)
 
 # import the GBIF data dump
-gbif_us_dataset <- read_csv("../../../gbif_idigbio_institutionCode_summary_cleaned/cleaned_gbif_us_institutionCode_MIDS_2020.07.08.csv")
+gbif_us_dataset <- read_csv("../../../gbif_idigbio_institutionCode_summary_cleaned/agg_csv/cleaned_gbif_us_institutionCode_MIDS_2020-10-09_agg.csv")
+gbif_us_dataset <- gbif_us_dataset %>% select(-File)
 ```
 
 
