@@ -25,7 +25,9 @@ val idigbio = spark.
     load("idigbio_plants_combined_avro")
 
 val common = gbif.
+    select($"institutionCode", $"collectionCode", $"catalogNumber").
     join(idigbio, $"institutionCode" === $"or_institutionCode" && $"collectionCode" === $"or_collectionCode" && $"catalogNumber" === $"or_catalogNumber", "inner").
+    distinct.
     groupBy("institutionCode").
     count.
     withColumnRenamed("count", "commonToGBIFiDigBio").
@@ -38,8 +40,10 @@ val common = gbif.
     csv("gbif_idigbio_comparisons/commonToGBIFiDigBio.csv")
 
 val uniquegbif = gbif.
+    select($"institutionCode", $"collectionCode", $"catalogNumber").
     join(idigbio, $"institutionCode" === $"or_institutionCode" && $"collectionCode" === $"or_collectionCode" && $"catalogNumber" === $"or_catalogNumber", "left").
     where($"or_catalogNumber".isNull).
+    distinct.
     groupBy("institutionCode").
     count.
     withColumnRenamed("count", "uniqueToGBIF").
@@ -51,9 +55,11 @@ val uniquegbif = gbif.
     option("escape", "\"").
     csv("gbif_idigbio_comparisons/uniqueToGBIF.csv")
 
-val uniqueidigbio = gbif.
-    join(idigbio, $"institutionCode" === $"or_institutionCode" && $"collectionCode" === $"or_collectionCode" && $"catalogNumber" === $"or_catalogNumber", "right").
+val uniqueidigbio = idigbio.
+    select($"or_institutionCode", $"or_collectionCode", $"or_catalogNumber").
+    join(gbif, $"institutionCode" === $"or_institutionCode" && $"collectionCode" === $"or_collectionCode" && $"catalogNumber" === $"or_catalogNumber", "left").
     where($"catalogNumber".isNull).
+    distinct.
     groupBy("or_institutionCode").
     count.
     withColumnRenamed("count", "uniqueToiDigBio").
