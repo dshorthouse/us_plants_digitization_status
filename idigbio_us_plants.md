@@ -6,6 +6,9 @@ https://api.idigbio.org/v2/download/?rq=
 Download status Oct 5
 https://api.idigbio.org/v2/download/3586f59b-dd81-48b2-a1ab-f1d70b0325ca
 
+Download status Dec 5
+https://api.idigbio.org/v2/download/fbc1e5d5-aa90-479c-b663-af0a6a91e2be
+
 ```json
 rq = { "basisofrecord": [ "Specimen", "PreservedSpecimen", "FossilSpecimen" ]}
 ```
