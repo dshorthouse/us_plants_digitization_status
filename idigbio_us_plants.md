@@ -695,6 +695,12 @@ val idigbio = occurrence.
 
 idigbio.write.mode("overwrite").format("avro").save("idigbio_plants_combined_avro")
 
+//load the occurrence_raw DataFrame, can later skip the above processes and start from here
+val idigbio = spark.
+    read.
+    format("avro").
+    load("idigbio_plants_combined_avro")
+
 idigbio.groupBy("or_institutionCode").
     agg(
       count("o_coreid").alias("total"),
