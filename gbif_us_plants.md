@@ -808,7 +808,7 @@ val gbif = spark.
     option("escape", "\"").
     option("treatEmptyValuesAsNulls", "true").
     option("ignoreLeadingWhiteSpace", "true").
-    load("/Users/shorthoused/Downloads/GBIF/occurrence.txt").
+    load("/Users/dshorthouse/Downloads/GBIF/occurrence.txt").
     select(occurrence_terms.map(col): _*).
     filter($"kingdomKey".isin(kingdomKeys:_*)).
     filter($"datasetKey".isin(datasetKeys:_*)).
