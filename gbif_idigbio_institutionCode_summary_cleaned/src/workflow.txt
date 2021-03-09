@@ -1,4 +1,6 @@
 1. Run OpenRefine json regime on raw data
 1a. rename column or_institutionCode to institutionCode
+1b. add to this document when you find new issues: 
+https://docs.google.com/spreadsheets/d/1-yICaoet5fSfl3vNtDgXyZae4k5135BL-o0vAJDX7tE/edit?usp=sharing
 2. Remove dupes with remove_dupes.R
 3. Create an aggregated sheet with merge_pulls.R
