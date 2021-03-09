@@ -47,36 +47,10 @@
       "mode": "row-based"
     },
     "columnName": "institutionCode",
-    "expression": "grel:value.replace('Connecituct College','CCNL').replace('USFS/BHSC','BHSC').replace('Bartlet Arboretum','BART').replace('Boston University','BSN').replace('Central Connecticut State University','CCSU').replace('Western Connecticut State University','WCSU').replace('YM-YOSE','YM').replace('PH 987012','PH').replace('Westfield State University','WSCH').replace('Arizona State','ASU').replace('Wilton Garden Club','WGCH').replace('Keene State University','KESC').replace('USU-UTC','UTC').replace('Colgate University','GRCH').replace('Yale Peabody Museum of Natural History','YU').replace('USU-UTC','UTC').replace('USFS/BHSC','BHSC').replace('USDA-SBML','BPI').replace('University of Colorado Herbarium','COLO').replace('University of Maine','MAINE').replace('University of Massachusetts','MASS').replace('University of New Hampshire','NHA').replace('University of Rhode Island','KIRI').replace('University of Vermont','VT')",
+    "expression": "grel:value.replace('Connecituct College','CCNL').replace('USFS/BHSC','BHSC').replace('Bartlet Arboretum','BART').replace('Boston University','BSN').replace('Central Connecticut State University','CCSU').replace('Western Connecticut State University','WCSU').replace('YM-YOSE','YM').replace('PH 987012','PH').replace('Westfield State University','WSCH').replace('Arizona State','ASU').replace('Wilton Garden Club','WGCH').replace('Keene State University','KESC').replace('USU-UTC','UTC').replace('Colgate University','GRCH').replace('Yale Peabody Museum of Natural History','YU').replace('USU-UTC','UTC').replace('USFS/BHSC','BHSC').replace('USDA-SBML','BPI').replace('University of Colorado Herbarium','COLO').replace('University of Maine','MAINE').replace('University of Massachusetts','MASS').replace('University of New Hampshire','NHA').replace('University of Rhode Island','KIRI').replace('University of Vermont','VT').replace('C.A. Triplehorn Insect Collection, Ohio State University, Columbus, OH (OSUC)', 'OSUC').replace('University of Rochester', 'ROCH').replace('Milwaukee Public Museum (MPM)', 'MPM')",
     "onError": "keep-original",
     "repeat": false,
     "repeatCount": 10,
-    "description": "Text transform on cells in column institutionCode using expression grel:value.replace('Connecituct College','CCNL').replace('USFS/BHSC','BHSC').replace('Bartlet Arboretum','BART').replace('Boston University','BSN').replace('Central Connecticut State University','CCSU').replace('Western Connecticut State University','WCSU').replace('YM-YOSE','YM').replace('PH 987012','PH').replace('Westfield State University','WSCH').replace('Arizona State','ASU').replace('Wilton Garden Club','WGCH').replace('Keene State University','KESC').replace('USU-UTC','UTC').replace('Colgate University','GRCH').replace('Yale Peabody Museum of Natural History','YU').replace('USU-UTC','UTC').replace('USFS/BHSC','BHSC').replace('USDA-SBML','BPI').replace('University of Colorado Herbarium','COLO').replace('University of Maine','MAINE').replace('University of Massachusetts','MASS').replace('University of New Hampshire','NHA').replace('University of Rhode Island','KIRI').replace('University of Vermont','VT')"
-  },
-  {
-    "op": "core/text-transform",
-    "engineConfig": {
-      "facets": [
-        {
-          "type": "range",
-          "name": "institutionCode",
-          "expression": "value.length()",
-          "columnName": "institutionCode",
-          "from": 7,
-          "to": 78,
-          "selectNumeric": true,
-          "selectNonNumeric": true,
-          "selectBlank": true,
-          "selectError": true
-        }
-      ],
-      "mode": "row-based"
-    },
-    "columnName": "institutionCode",
-    "expression": "grel:value.replace('C.A. Triplehorn Insect Collection, Ohio State University, Columbus, OH (OSUC)', 'OSUC')",
-    "onError": "keep-original",
-    "repeat": false,
-    "repeatCount": 10,
-    "description": "Text transform on cells in column institutionCode using expression grel:value.replace('C.A. Triplehorn Insect Collection, Ohio State University, Columbus, OH (OSUC)', 'OSUC')"
+    "description": "Text transform on cells in column institutionCode using expression grel:value.replace('Connecituct College','CCNL').replace('USFS/BHSC','BHSC').replace('Bartlet Arboretum','BART').replace('Boston University','BSN').replace('Central Connecticut State University','CCSU').replace('Western Connecticut State University','WCSU').replace('YM-YOSE','YM').replace('PH 987012','PH').replace('Westfield State University','WSCH').replace('Arizona State','ASU').replace('Wilton Garden Club','WGCH').replace('Keene State University','KESC').replace('USU-UTC','UTC').replace('Colgate University','GRCH').replace('Yale Peabody Museum of Natural History','YU').replace('USU-UTC','UTC').replace('USFS/BHSC','BHSC').replace('USDA-SBML','BPI').replace('University of Colorado Herbarium','COLO').replace('University of Maine','MAINE').replace('University of Massachusetts','MASS').replace('University of New Hampshire','NHA').replace('University of Rhode Island','KIRI').replace('University of Vermont','VT').replace('C.A. Triplehorn Insect Collection, Ohio State University, Columbus, OH (OSUC)', 'OSUC').replace('University of Rochester', 'ROCH').replace('Milwaukee Public Museum (MPM)', 'MPM')"
   }
 ]
