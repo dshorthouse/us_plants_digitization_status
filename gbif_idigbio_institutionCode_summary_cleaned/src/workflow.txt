@@ -1,4 +1,4 @@
-1. Run OpenRefine json regime on raw data
+1. Run OpenRefine json regime on raw data (gbif_idigbio_institutionCode_summary_cleaned/src/open_refine_cleaning_regime.json)
 1a. rename column or_institutionCode to institutionCode
 1b. add to this document when you find new issues: 
 https://docs.google.com/spreadsheets/d/1-yICaoet5fSfl3vNtDgXyZae4k5135BL-o0vAJDX7tE/edit?usp=sharing
