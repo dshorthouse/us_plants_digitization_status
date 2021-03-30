@@ -2,7 +2,6 @@ library(tidyverse)
 
 # combine data from the three pulls, july, october, december
 
-
 idig_oct <- read_csv("../agg_csv/cleaned_idigbio_us_institutionCode_MIDS_2020-10-09_agg.csv")
 gbif_oct <- read_csv("../agg_csv/cleaned_gbif_us_institutionCode_MIDS_2020-10-09_agg.csv")
 
@@ -14,12 +13,12 @@ gbif_dec <- read_csv("../agg_csv/cleaned_gbif_us_institutionCode_MIDS_2020-12-06
 
 # make one csv for idig
 idig <- bind_rows(list(idig_dec, idig_oct, idig_july))
-idig$month <- recode(idig$File, "idigbio_us_institutionCode_MIDS_2020.07.13.csv" = "july", "cleaned_idigbio_us_institutionCode_MIDS_2020-10-09-csv.csv" = "october", "../agg_month/cleaned_idigbio_us_institutionCode_MIDS_2020-12-15-csv_agg.csv" = "december")
+idig$month <- recode(idig$File, "idigbio_us_institutionCode_MIDS_2020.07.13.csv" = "july", "cleaned_idigbio_us_institutionCode_MIDS_2020-10-09-csv.csv" = "october", "cleaned_idigbio_us_institutionCode_MIDS_2020-12-15-csv.csv" = "december")
 write_csv(idig, "../agg_month_csv/cleaned_idigbio_us_institutionCode_MIDS.csv")
 
 # one csv for gbif
 gbif <- bind_rows(list(gbif_oct, gbif_july, gbif_dec))
-gbif$month <- recode(gbif$File, "gbif_us_institutionCode_MIDS_2020.07.08.csv" = "july", "cleaned_gbif_us_institutionCode_MIDS_2020-10-09-csv.csv" = "october", "../agg_month/cleaned_gbif_us_institutionCode_MIDS_2020-12-06-csv_agg.csv" = "december")
+gbif$month <- recode(gbif$File, "gbif_us_institutionCode_MIDS_2020.07.08.csv" = "july", "cleaned_gbif_us_institutionCode_MIDS_2020-10-09-csv.csv" = "october", "cleaned_idigbio_us_institutionCode_MIDS_2020-12-15-csv.csv" = "december")
 write_csv(gbif, "../agg_month_csv/cleaned_gbif_us_institutionCode_MIDS.csv")
 
 
