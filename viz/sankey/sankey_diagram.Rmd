@@ -1,7 +1,7 @@
 ---
 title: "US Plants Digitization Status"
 author: "Jocelyn Pender"
-date: "13/07/2020"
+date: "30/03/2020"
 output: html_document
 ---
 
@@ -22,11 +22,11 @@ library(networkD3)
 
 ```{r dataprep}
 
-gbif_comp_data <- read_csv("../../gbif_idigbio_comparisons/uniqueToGBIF.csv/2020-10-09.csv")
+gbif_comp_data <- read_csv("../../gbif_idigbio_comparisons/uniqueToGBIF.csv/2020-12-06.csv")
 
-idigbio_comp_data <- read_csv("../../gbif_idigbio_comparisons/uniqueToiDigBio.csv/2020-10-09.csv")
+idigbio_comp_data <- read_csv("../../gbif_idigbio_comparisons/uniqueToiDigBio.csv/2020-12-06.csv")
 
-common_comp_data <- read_csv("../../gbif_idigbio_comparisons/commonToGBIFiDigBio.csv/2020-10-09.csv")
+common_comp_data <- read_csv("../../gbif_idigbio_comparisons/commonToGBIFiDigBio.csv/2020-12-06.csv")
 
 idigbio_comp_data <- idigbio_comp_data %>% rename(institutionCode = or_institutionCode)
 
@@ -56,6 +56,23 @@ links <- data.frame(source=c("Total Number of US Specimens", "Total Number of US
 links$group <- as.factor(c("type_idigbio","type_gbif","type_unknown","type_gbif"))
 
 ```
+
+#### Calculate percentages for use in the paper!
+
+```{r}
+
+# % digitially available
+((sankey_sums$total_num_specimens - total_unknown)/sankey_sums$total_num_specimens)*100
+
+# % digitially available GBIF
+(total_gbif / sankey_sums$total_num_specimens)*100
+
+# % digitially available iDigBio
+(total_idigbio / sankey_sums$total_num_specimens)*100
+
+
+```
+
 
 ### Generate sankey plot
 
